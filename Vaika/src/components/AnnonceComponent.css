@@ -1,0 +1,23 @@
+.image-container {
+    position: relative;
+    display: inline-block;
+    }
+
+.overlay-text {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: x-small;
+    font-weight: bold;
+}
+.overlay-prix{
+    position: absolute;
+    top: 92%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: x-small;
+    font-weight: bold;
+}
