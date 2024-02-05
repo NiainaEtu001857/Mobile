@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Input Fields</title>
+</head>
+<body>
+
+  <div id="inputContainer">
+    <!-- Les champs de saisie seront ajoutés ici -->
+  </div>
+
+  <button onclick="ajouterChamp()">Ajouter un champ</button>
+
+  <script>
+    function ajouterChamp() {
+      // Créer un nouvel élément input
+      var nouvelInput = document.createElement("input");
+      nouvelInput.type = "text";
+      nouvelInput.name = "types";
+
+      // Créer un nouvel élément br pour ajouter une nouvelle ligne
+      var sautLigne = document.createElement("br");
+
+      // Ajouter les éléments créés au conteneur
+      document.getElementById("inputContainer").appendChild(nouvelInput);
+      document.getElementById("inputContainer").appendChild(sautLigne);
+    }
+  </script>
+
+</body>
+</html>
