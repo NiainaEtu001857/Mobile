@@ -25,3 +25,21 @@ export interface AnneeSortie {
     model_id: number,
     annee:number
 }
+
+export interface Lieu {
+    id_lieu: number;
+    lieu: string;
+}
+
+export interface Utilisateur {
+    id_utilisateur: number,
+    nom: string;
+    prenom: string;
+    genre: string;
+    date_naissance: string;
+    email: string;
+    mdp: string;
+    roles: number;
+    nb_achat:number;
+    nb_annonce:number;
+}

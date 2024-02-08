@@ -45,9 +45,11 @@ const Inscription: React.FC = () => {
             const responsetoken = await response.json();
             if (response.ok) {
                 const token = await responsetoken.data;
-                console.log(responsetoken);
+                console.log("tongaaaaaaaaaaaa");
+                console.log(token);
                 sessionStorage.setItem('token', token);
                 history.push("/Menu");
+                window.location.reload();
             } else {
                 setShowAlert(true);
             }

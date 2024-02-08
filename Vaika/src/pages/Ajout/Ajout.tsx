@@ -67,7 +67,7 @@ const Ajout: React.FC = () => {
   // data
   const[models , setModels] = useState<Models[]>();
   const[carburants , setCarburants] = useState<Carburant[]>();
-  const[ years , setYears] =useState<Annees_sortie>();
+  const[ years , setYears] =useState<Annees_sortie[]>([]);
   const vitesse = [80 , 90 , 100 , 110 , 120 , 130 , 140 , 150 , 160 , 170 , 180 , 190 , 200 , 210 , 220 , 230 , 240 , 250 , 260 , 270 , 280 , 290 , 300 , 310 , 320 , 330 , 340 , 3]
   const history = useHistory();
 
@@ -149,37 +149,6 @@ const Ajout: React.FC = () => {
         console.error('Error during fetch:', error);
     }
   };
-
-  const fetchAnnnees = async () => {
-    try {
-        const token = sessionStorage.getItem('token');
-        console.log(model);
-        
-        const response = await fetch('http://localhost:8080/api/v1/models/v1/annees/${model}', {
-
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (response.ok) {
-            const responseData = await response.json();
-           
-            setYears(responseData.data);
-            console.log(years);
-            
-        } else {
-            console.error('Error fetching annonces:', response.status);
-        }
-    } catch (error) {
-        console.error('Error during fetch:', error);
-    }
-  };
-  if(model != 0 || model != null){
-    fetchAnnnees();
-  }
     fetchModel();
     fetchCarburant();
 }, []);
@@ -209,7 +178,7 @@ const afficherDonnees = () => {
                   ))}
                 </IonSelect>
               </IonItem>
-
+                    <br />
               <IonItem>
                 <IonSelect
                   interface="popover"
@@ -227,6 +196,7 @@ const afficherDonnees = () => {
                   ))}
                 </IonSelect>
               </IonItem>
+              <br />
               <IonItem>
                 <IonInput
                 label="  Marticule" 
@@ -238,6 +208,7 @@ const afficherDonnees = () => {
                 onIonChange={(e) => setMatricule(e.detail.value!)}
                  />
               </IonItem>
+              <br />
               <IonItem>
                 <IonTextarea
                 label="  Description" 
@@ -254,15 +225,29 @@ const afficherDonnees = () => {
         return (
           // <div className="input">
             <IonList>
-              <IonItem>
-                </IonItem>
                 <IonItem>
                   <IonSelect 
                   interface="popover"
-                  aria-label="Kilometrage" 
+                  aria-label="annees" 
+                  value={annees_sortie}
+                  onIonChange={(e) => setAnnees(e.detail.value)}
+                  placeholder="Choisir l' annees" 
+                  >
+                   {years.map((ans) => (
+                      <IonSelectOption key={ans.idAnneesortie} value={ans.idAnneesortie}>
+                      {ans.annee}
+                    </IonSelectOption>
+                   ))}
+                  </IonSelect>
+                </IonItem>
+                <br />
+                <IonItem>
+                  <IonSelect 
+                  interface="popover"
+                  aria-label="Boite de vitesse" 
                   value={boite_vitesse}
                   onIonChange={(e) => setBoite_vite(e.detail.value)}
-                  placeholder="Choisir le kilometrage" 
+                  placeholder="Choisir votre boite de vitesse" 
                   >
                    {vitesse.map((vit) => (
                       <IonSelectOption key={vit} value={vit}>
@@ -271,6 +256,7 @@ const afficherDonnees = () => {
                    ))}
                   </IonSelect>
                 </IonItem>
+                <br />
                 <IonItem>
                   <label className="custom-file-upload">
                     <input type="file" accept="image/*" multiple onChange={handleFileSelect} />
@@ -278,7 +264,7 @@ const afficherDonnees = () => {
                   </label>
                   <label>Total d image upload : {listImg.length}</label>
                 </IonItem>
-                
+                <br />
               </IonList>
         );
       case 2:
@@ -296,15 +282,16 @@ const afficherDonnees = () => {
                 onIonChange={(e) => {setPrix(parseFloat(e.detail.value!))}}
               ></IonInput>
               </IonItem>
+              <br />
               <IonItem>
-                
                 <IonList>
+                  <br />
                   <IonItem>
                     <IonLabel position="stacked">Entrez les propriete</IonLabel>
                   </IonItem>
                     {proprietes.map((input, index) => (
                       <IonItem key={index}>
-                        <IonLabel position="stacked">Types:</IonLabel>
+                        <IonLabel position="stacked">Titre :</IonLabel>
                         <IonInput
                           type="text"
                           value={input.titre}
@@ -326,6 +313,7 @@ const afficherDonnees = () => {
                         />
                       </IonItem>
                     ))}
+                    <br />
                   <IonButton expand="full" color="secondary" onClick={ajouterChamps}>
                     Ajouter autre propriete
                   </IonButton>
@@ -336,6 +324,37 @@ const afficherDonnees = () => {
         );
     }
   };
+  const modele = async () => {
+    if(model != 0){
+      try {
+        const token = sessionStorage.getItem('token');
+        console.log("io ehhh :" + model);
+        const url = 'http://localhost:8080/api/v1/models/v1/details/' + model;
+        console.log(url);
+        
+        const response = await fetch(url, {
+  
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+  
+        if (response.ok) {
+            const responseData = await response.json();
+           
+            setYears(responseData.data);
+            console.log(years);
+            
+        } else {
+            console.error('Error fetching annonces:', response.status);
+        }
+      } catch (error) {
+          console.error('Error during fetch:', error);
+      }
+    }
+  }
 
   const handleLogin = async () => {
     const photo = [];
@@ -347,7 +366,6 @@ const afficherDonnees = () => {
         "contentType": "image/jpeg"
       };
       photo.push(d);
-      
     }
     const data = {
       lieuId: 2,
@@ -362,17 +380,12 @@ const afficherDonnees = () => {
           utilisateurId: 1,
           kilometrage: boite_vitesse,
           modelcarburantId: carburant,
-          anneesortieId: 1
+          anneesortieId: annees_sortie
       },
       infoAnnonce: {
         description:description,
         proprietes: proprietes,
-        photos: [
-          {
-            data: "base_64",
-            contentType: "imgage/png"
-          }
-        ]
+        photos:photo
       }
     };
     // const data = {
@@ -426,6 +439,7 @@ const afficherDonnees = () => {
         if (response.ok) {
             console.log()
             history.push("/Menu");
+            window.location.reload();
         } else {
             setShowAlert(true);
         }
@@ -496,7 +510,8 @@ const afficherDonnees = () => {
                       handleLogin();
                     } else {
                       handleNext();
-                      handleLogin();
+                      // handleLogin();
+                      modele();
                     }
                   }}
                 >

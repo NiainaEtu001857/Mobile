@@ -1,14 +1,133 @@
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCheckbox, IonContent, IonIcon } from "@ionic/react";
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCheckbox, IonCol, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonModal, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar } from "@ionic/react";
 import { AnnonceModel } from "../data/AnnonceModel"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { carOutline } from "ionicons/icons";
+import { add, carOutline, list, remove } from "ionicons/icons";
+import { useEffect, useRef, useState } from "react";
+import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
+import { Utilisateur } from "../data/DetailVoitureModel";
+import { useHistory } from "react-router";
 export interface AnnonceDetail {
     data?:AnnonceModel;
 } 
 
 // 
 const DetailAnnonceComponent: React.FC<AnnonceDetail> = (data) => {
+    const modal = useRef<HTMLIonModalElement>(null);
+    const input = useRef<HTMLIonInputElement>(null);
+    // data 
+
+    const [utilisateurs , setUtilsateurs] = useState<Utilisateur[]>();
+
+    // get 
+    const [utilisateur , setUtilsateur] = useState<number | undefined>();
+    const [prix_achat , setPrix_achat] = useState<number | undefined>();
+
+    const [message, setMessage] = useState(
+        "This modal example uses triggers to automatically open a modal when the button is clicked."
+      );
+    function confirm() {
+        modal.current?.dismiss(input.current?.value, "confirm");
+    }
+
+    function onWillDismiss(ev: CustomEvent<OverlayEventDetail>) {
+        if (ev.detail.role === "confirm") {
+            setMessage(`Hello, ${ev.detail.data}`);
+        }
+    }
+
+    useEffect(() => {
+
+        const fetchUtilisateur = async () => {
+            try {
+                const token = sessionStorage.getItem('token');
+                const response = await fetch('http://localhost:8080/api/auth', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                
+                    // setCarburants(responseData.data);
+                    setUtilsateurs(responseData.data);
+                    // console.log(categories);
+                } else {
+                    console.error('Error fetching annonces:', response.status);
+                }
+            } catch (error) {
+                console.error('Error during fetch:', error);
+            }
+        };
+            
+        fetchUtilisateur();
+    }, []);
+    const currentDate = new Date();
+
+    const getdata = {
+        annonce_id: data.data?.annonce_id,
+        acheteur_id: utilisateur,
+        prix_achat: prix_achat,
+        date_achat: currentDate.toISOString()
+    }
+
+    const getVendu = async () => {
+        console.log(JSON.stringify(getdata));
+        
+        try {
+            const token = sessionStorage.getItem('token');
+            const response = await fetch('http://localhost:8080/api/v1/annonces/vendu', {
+                method: 'POST',
+                body:JSON.stringify(getdata),
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log(responseData.data);
+                // setCarburants(responseData.data);
+                // setUtilsateurs(responseData.data);
+                // console.log(categories);
+            } else {
+                console.error('Error fetching annonces:', response.status);
+            }
+        } catch (error) {
+            console.error('Error during fetch:', error);
+        }
+    };
+
+    const history = useHistory();
+
+    const getSuprimer = async () => {
+        try {
+            const token = sessionStorage.getItem('token');
+            const response = await fetch('http://localhost:8080/api/v1/annonces/'+ data.data?.annonce_id, {
+                method: 'DELETE',
+                body:JSON.stringify(getdata),
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log(responseData.data);
+                history.push("/Menu");
+               
+            } else {
+                console.error('Error fetching annonces:', response.status);
+            }
+        } catch (error) {
+            console.error('Error during fetch:', error);
+        }
+    }
     return (
         <IonContent>
              <IonCard>
@@ -34,10 +153,82 @@ const DetailAnnonceComponent: React.FC<AnnonceDetail> = (data) => {
                     </button>
                 </div>
                 <IonCardHeader>
-                    {/* <IonCardTitle>{data.}</IonCardTitle>
-                    <IonCardSubtitle>{annonce.data.Marque}</IonCardSubtitle> */}
+                    <IonCardTitle>{data.data?.acteur} <strong style={{ textAlign: 'right' }}> Lieu : {data.data?.lieu }</strong></IonCardTitle>
+                    <IonCardSubtitle>Prix du produit : {data.data?.prix_vente} Ar</IonCardSubtitle>
                 </IonCardHeader>
                 <IonCardContent>
+                    <IonRow>
+                        <IonCol size="10" >
+                            <IonButton id="open-modal">
+                                {/* <IonIcon icon={add}></IonIcon> */}
+                                Vendu
+                            </IonButton>
+                        <IonModal
+                            ref={modal}
+                            onWillDismiss={(ev) => onWillDismiss(ev)}
+                            trigger="open-modal"
+                        >
+                            <IonHeader>
+                            <IonToolbar>
+                                <IonButtons slot="start">
+                                <IonButton onClick={() => modal.current?.dismiss()}>
+                                    Cancel
+                                </IonButton>
+                                </IonButtons>
+                                <IonTitle>Ajouter Categories :</IonTitle>
+
+                            </IonToolbar>
+                            </IonHeader>
+                            <IonContent className="ion-padding">
+                                <IonItem>
+                                    <IonInput
+                                    label=""
+                                    labelPlacement="stacked"
+                                    ref={input}
+                                    type="number"
+                                    placeholder="Prix d' achat ... "
+                                    value={prix_achat} 
+                                    onIonChange={(e) => setPrix_achat(parseFloat(e.detail.value!))}
+                                    />
+                                </IonItem>
+                                <IonItem>
+                                    <IonSelect
+                                        interface="popover"
+                                        toggleIcon={add}
+                                        expandedIcon={remove}
+                                        aria-label="Client" 
+                                        value={utilisateur}
+                                        onIonChange={(e) => setUtilsateur(parseInt(e.detail.value))}
+                                        placeholder="Choisir l ache teur" 
+                                        >
+                                        {utilisateurs?.map((m) => (
+                                            <IonSelectOption key={m.id_utilisateur} value={m.id_utilisateur}>{m.nom + "  " + m.prenom} </IonSelectOption>
+                                        ))}
+                                    </IonSelect>
+                                </IonItem>
+                                <IonButton 
+                                color={"secondary"}
+                                onClick={() => {
+                                    getVendu();
+                                    confirm();
+                                }}
+                                >
+                                    Valider
+                                </IonButton>
+                            </IonContent>
+                        </IonModal>
+                        </IonCol>
+                        <IonCol size="2">
+                        <div className="btn-group dropend"  color="transparent">
+                            <IonButton slot="end" className="btn btn-link dropdown-toggle" type="button"  data-bs-toggle="dropdown" aria-expanded="false" ><IonIcon icon={list}></IonIcon></IonButton>
+                            <ul className="dropdown-menu">
+                                
+                                <li><IonButton className="dropdown-item" routerLink={`/Modifier/${data.data?.annonce_id}`}  >Modifier</IonButton></li>
+                                <li><IonButton className="dropdown-item" onClick={getSuprimer}>Suprimer</IonButton></li>
+                            </ul>
+                        </div>
+                        </IonCol>
+                    </IonRow>
                     <div className="content">
                         <div className="accordion" id="accordionExample">
                             <div className="accordion-item">

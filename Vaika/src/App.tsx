@@ -41,6 +41,7 @@ import ModifMarque from './pages/Modification/MarqueM';
 import ModifCategorie from './pages/Modification/CategorieM';
 import Recherche from './pages/Recherche';
 import Propriete from './components/Propriete';
+import Modifier from './pages/Modification/AnnonceM';
 
 setupIonicReact();
 
@@ -51,10 +52,6 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <IonSplitPane contentId="main">
-          {/* <Annonce /> */}
-          {/* <Ajout /> */}
-          {/* <DetailAnnonce  /> */}
-          {/* <Propriete /> */}
           <Menu />
           <IonRouterOutlet id="main">
             <Route path="/Menu" exact={true}>
@@ -70,7 +67,7 @@ const App: React.FC = () => {
               <Inscription />
             </Route>
             <Route path="/" exact={true}>
-              <Login />o
+              <Login />
             </Route>
             <Route path="/folder/:name" exact={true}>
               <Page />
@@ -96,6 +93,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/Recherche" exact={true} >
               <Recherche />
+            </Route>
+            <Route path="/Modifier/:id" exact={true} >
+              <Modifier />
             </Route>
             
           </IonRouterOutlet>

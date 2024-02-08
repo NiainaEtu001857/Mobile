@@ -4,14 +4,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './Page.css';
 import Annonces from './Annonces';
+import { Menu } from '@mui/material';
 
 const Page: React.FC = () => {
 
-  const { name } = useParams<{ name: string; }>();
+  const name  = "annonce";
 
   return (
     <IonPage>
-      {/* <Menu /> */}
+      {/* <Menu open={true} /> */}
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -20,15 +21,6 @@ const Page: React.FC = () => {
           <IonTitle>{name}</IonTitle>
         </IonToolbar>
       </IonHeader>
-
-      {/* <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">{name}</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name={name} />
-      </IonContent> */}
       <Annonces />
     </IonPage>
   );

@@ -1,9 +1,9 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage, IonRow } from '@ionic/react';
 import { AnnonceModel } from '../data/AnnonceModel';
-import { add } from 'ionicons/icons';
+import { add, heart } from 'ionicons/icons';
 import './AnnonceComponent.css';
 
 export interface AnnonceCModel {
@@ -20,19 +20,30 @@ const AnnonceC: React.FC<AnnonceCModel> = ({data}) => {
       };
 
       return (
-        <IonContent style={{marginLeft: '2%'}}>
+        <IonContent>
                 {data?.map((annonce) => (
-                    <IonCard style={{width: '44%' , float: 'left' , }} key={annonce.annonce_id} routerLink={`/detail/${annonce.annonce_id}`}>
+                    <IonCard>
                         <div className="image-container">
-                            <img height={'10%'} alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
-                            <IonLabel className="overlay-prix">{annonce.prix_vente} $</IonLabel>
-                            <IonLabel className="overlay-text" >{annonce.detailvoiture.marque}</IonLabel>
+                            <img height={'10%'} alt="Silhouette of mountains" src="/Akory.png" />
                         </div>
-                        
+                        <IonCardHeader>
+                            <IonCardTitle> {annonce.acteur} </IonCardTitle>
+                            <IonCardSubtitle>Prix du produit : <strong>{annonce.prix_vente} $</strong></IonCardSubtitle>
+                        </IonCardHeader>
                         <IonCardContent>
                             <IonLabel>{annonce.description}</IonLabel>
                         </IonCardContent>
+                        <IonRow>
+                            <IonCol size='3'>
+                                {/* <IonButton > <IonIcon icon={heart}></IonIcon> </IonButton> */}
+                            </IonCol>
+                           <IonCol>
+                                <IonButton style={{marginLeft: '65%' }} key={annonce.annonce_id} routerLink={`/detail/${annonce.annonce_id}`} color="danger">Voir +</IonButton>
+                           </IonCol>
+                        </IonRow>
+                        
                     </IonCard>
+                    
                 ))}
         </IonContent>
       );

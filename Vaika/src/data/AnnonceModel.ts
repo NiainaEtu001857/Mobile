@@ -14,7 +14,7 @@ interface DetailVoiture {
     marque: string;
     categorie: string;
     annee:number;
-    carburant:number;
+    carburant:string;
 }
 
 export interface AnnonceModel {

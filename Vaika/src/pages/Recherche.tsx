@@ -1,54 +1,88 @@
 import { IonButton, IonButtons, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonMenuButton, IonModal, IonPage, IonRange, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonTitle, IonToolbar } from "@ionic/react";
 import { useEffect, useRef, useState } from "react";
-import { Carburant, Categorie, Marque } from "../data/DetailVoitureModel";
+import { Carburant, Categorie, Lieu, Marque } from "../data/DetailVoitureModel";
 import { add, remove } from "ionicons/icons";
 import 'ion-rangeslider/css/ion.rangeSlider.min.css';
 import 'ion-rangeslider/js/ion.rangeSlider.min.js';
 import * as $ from 'jquery';  // Importez jQuery
+import AnnonceC from "../components/AnnonceComponent";
 
 
 const Recherche: React.FC = () => {
     const name = "Recherche";
     const [searchText, setSearchText] = useState<string>('');
     const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
+    const [isReponse , setIsReponse] = useState<boolean>(false);
 
     const modal = useRef<HTMLIonModalElement>(null);
+    const input = useRef<HTMLIonInputElement>(null);
     const page = useRef(null);
 
     // format data
 
     //get data
-    const [marque , setMarque] = useState<string>('');
-    const [categorie , setCategorie] = useState<string>('');
+    const [marque , setMarque] = useState<string>();
+    const [categorie , setCategorie] = useState<string>();
     const [prix_vente , setPrix_vente] = useState({min: 0, max: 0});
     const [kilometrage , setKilometrage] = useState({min: 0, max: 0});
     const [date , setDate] = useState({debut: '' , fin: ''});
     const [carburant , setCarburant] = useState<string>('');
     const [autre , setAutre] = useState<string>('');
+    const [lieu , setlieu] = useState<string>('');
+    const [annee, setAnnee] = useState({min: 0 , max: 0});
+    const [annonces , setAnnonces] = useState([]);
+
+    const construireData = () => {
+        const data: { [key: string]: any } = {};
+
+        if (marque !== undefined && marque !== null) {
+            data["marque"] = marque;
+        }
+
+        if (categorie !== undefined && categorie !== null) {
+            data["categorie"] = categorie;
+        }
+
+        if (prix_vente.min !== 0 || prix_vente.max !== 0) {
+            data["prix_vente"] = prix_vente;
+        }
+
+        if (kilometrage.min !== 0 || kilometrage.max !== 0) {
+            data["kilometrage"] = kilometrage;
+        }
+
+        if (date.debut !== '' || date.fin !== '') {
+            data["date"] = date;
+        }
+
+        if (carburant !== '') {
+            data["carburant"] = carburant;
+        }
+
+        if (autre !== '') {
+            data["autre"] = autre;
+        }
+
+        if (lieu !== '') {
+            data["lieu"] = lieu;
+        }
+
+        if (annee.min !== 0 || annee.max !== 0) {
+            data["annee"] = annee;
+        }
+
+        return data;
+    }
+    
+    
 
     //data
     const[marques , setMarques] = useState<Marque[]>();
     const[categories ,setCategories] = useState<Categorie[]>();
     const[carburants , setCarburants] = useState<Carburant[]>();
-
+    const[lieux , setLieux] = useState<Lieu[]>();
     const rangeSliderRef = useRef<any>(null);
 
-    useEffect(() => {
-        if (rangeSliderRef.current) {
-          // Initialisez Ion.RangeSlider avec les options nécessaires
-          const slider = $(rangeSliderRef.current).ionRangeSlider({
-            type: "double",
-            min: 0,
-            max: 100,
-            from: 20,
-            to: 80,
-            grid: true
-          }).data("ionRangeSlider");
-    
-          // Utilisez slider pour accéder au curseur Ion.RangeSlider au lieu de rangeSliderRef.current
-          // slider est maintenant une instance du curseur Ion.RangeSlider
-        }
-      }, []);
 
     const [presentingElement, setPresentingElement] = useState<HTMLElement | null>(null);
 
@@ -72,6 +106,34 @@ const Recherche: React.FC = () => {
     const handleSearchBarClick = () => {
         setIsSearchActive(!isSearchActive);
     };
+
+    function confirmation() {
+        modal.current?.dismiss(input.current?.value, "confirm");
+      }
+
+    const recherche = async () => {
+        console.log(construireData());
+        try {
+            const token = sessionStorage.getItem('token');
+            const response = await fetch('http://localhost:8080/api/v1/annonces/filtre', {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(construireData())
+            });
+            const responsetoken = await response.json();
+            if (response.ok) {
+                const token = await responsetoken.data;
+                console.log(responsetoken.data);
+                confirmation();
+
+            } 
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    }
 
     useEffect(() => {
         const fetchMarque = async () => {
@@ -146,10 +208,36 @@ const Recherche: React.FC = () => {
             console.error('Error during fetch:', error);
         }
       };
+
+      const fetchLieu = async () => {
+        try {
+            const token = sessionStorage.getItem('token');
+            const response = await fetch('http://localhost:8080/api/lieux', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (response.ok) {
+                const responseData = await response.json();
+               
+                // setCarburants(responseData.data);
+                setLieux(responseData.data);
+                // console.log(categories);
+            } else {
+                console.error('Error fetching annonces:', response.status);
+            }
+        } catch (error) {
+            console.error('Error during fetch:', error);
+        }
+      };
         
         fetchCategorie();
         fetchMarque();
         fetchCarburant();
+        fetchLieu();
     }, []);
 
     return(
@@ -256,6 +344,33 @@ const Recherche: React.FC = () => {
                                         style={{ width: '100%' }} />
                                     </IonCol>
                                 </IonRow>
+
+                                <IonRow>
+                                    <br />
+                                    <IonLabel position="stacked">Sélectionnez votre annees :</IonLabel>
+                                   
+                                    <IonCol size="6">
+                                        <IonInput 
+                                        label="Min" 
+                                        type='number' 
+                                        labelPlacement="floating" 
+                                        fill="outline" 
+                                        value={annee.min}
+                                        onIonChange={(e) => setAnnee({ ...annee ,min: parseFloat(e.detail.value!)})}
+                                        style={{ width: '100%' }} />
+                                    </IonCol>
+                                    <IonCol size="6">
+                                        <IonInput 
+                                        label="Max" 
+                                        type='number' 
+                                        labelPlacement="floating" 
+                                        fill="outline" 
+                                        value={annee.max}
+                                        onIonChange={(e) => setAnnee({ ...annee ,max: parseFloat(e.detail.value!)})}
+                                        style={{ width: '100%' }} />
+                                    </IonCol>
+                                </IonRow>
+
                                 <IonLabel position="stacked">Choisir :</IonLabel>
                                 <IonRow>
                                     <IonCol size="6">
@@ -290,22 +405,40 @@ const Recherche: React.FC = () => {
                                         </IonSelect>
                                    </IonCol>
                                 </IonRow>
-                                
-                                <IonItem>
-                                    <IonSelect
-                                    interface="popover"
-                                    toggleIcon={add}
-                                    expandedIcon={remove}
-                                    aria-label="Carburant" 
-                                    value={carburant}
-                                    onIonChange={(e) => setCarburant(e.detail.value)}
-                                    placeholder="Carburant" 
-                                    >
-                                        {carburants?.map((c) => (
-                                            <IonSelectOption key={c.idCarburant} value={c.idCarburant}>{c.carburant}</IonSelectOption>
-                                        ))}
-                                    </IonSelect>
-                                </IonItem>
+
+                                <IonRow>
+                                    <IonCol size="6">
+                                        <IonSelect
+                                        interface="popover"
+                                        toggleIcon={add}
+                                        expandedIcon={remove}
+                                        aria-label="Carburant" 
+                                        value={carburant}
+                                        onIonChange={(e) => setCarburant(e.detail.value)}
+                                        placeholder="Carburant" 
+                                        >
+                                            {carburants?.map((c) => (
+                                                <IonSelectOption key={c.carburant} value={c.carburant}>{c.carburant}</IonSelectOption>
+                                            ))}
+                                        </IonSelect>
+                                    </IonCol>
+                                    <IonCol size="6">
+                                        <IonSelect
+                                        interface="popover"
+                                        toggleIcon={add}
+                                        expandedIcon={remove}
+                                        aria-label="Lieu" 
+                                        value={lieu}
+                                        onIonChange={(e) => setlieu(e.detail.value)}
+                                        placeholder="Lieu" 
+                                        >
+                                            {lieux?.map((l) => (
+                                                <IonSelectOption key={l.lieu} value={l.lieu}>{l.lieu}</IonSelectOption>
+                                            ))}
+                                        </IonSelect>
+                                    </IonCol>
+                                </IonRow>
+
                                 <IonItem>
                                     <IonLabel>Matricule/ Detail annonce / propriete</IonLabel>
                                     <IonInput
@@ -316,8 +449,18 @@ const Recherche: React.FC = () => {
                                     value={autre}
                                     onIonChange={(e) => setAutre(e.detail.value!)} />
                                 </IonItem>
+                                <IonButton
+                                style={{width:'100%'}}
+                                color={"success"}
+                                onClick={recherche}
+                                >Valider</IonButton>          
                             </IonContent>
                         </IonModal></>
+            )}
+            {isReponse && (
+                <>
+                <AnnonceC data={annonces} />
+                </>
             )}
             </IonContent>
         </IonPage>

@@ -30,6 +30,7 @@ const Login: React.FC = () => {
                 console.log(responsetoken);
                 sessionStorage.setItem('token', token);
                 history.push("/Menu");
+                window.location.reload();
             } else {
                 setShowAlert(true);
             }

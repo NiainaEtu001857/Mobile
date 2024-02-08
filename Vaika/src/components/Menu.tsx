@@ -7,19 +7,17 @@ import {
   IonList,
   IonListHeader,
   IonMenu,
-  IonMenuToggle,
-  IonNote,
-  IonSelect,
-  IonSelectOption,
+  IonMenuToggle
 } from '@ionic/react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-import { useLocation } from 'react-router-dom';
-import { add, archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, remove, searchCircleSharp, searchOutline, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
+import { useHistory, useLocation } from 'react-router-dom';
+import {  addOutline, addSharp, heartOutline, heartSharp, listOutline, listSharp, mailOutline, mailSharp, menuOutline, menuSharp, paperPlaneOutline, paperPlaneSharp, pulseOutline, pulseSharp, remove, searchCircleSharp, searchOutline } from 'ionicons/icons';
 import './Menu.css';
 import React from 'react';
+import { handlogout } from '../data/Function';
 
 interface AppPage {
   url: string;
@@ -29,6 +27,13 @@ interface AppPage {
 }
 
 const appPages: AppPage[] = [
+
+  {
+    title: 'Menu',
+    url: '/Menu',
+    iosIcon: menuOutline,
+    mdIcon: menuSharp
+  },
   {
     title: 'Recherche',
     url: '/Recherche',
@@ -36,22 +41,22 @@ const appPages: AppPage[] = [
     mdIcon: searchCircleSharp
   },
   {
-    title: 'Menu',
-    url: '/Menu',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp
-  },
-  {
-    title: 'Ajout',
+    title: 'Ajouter',
     url: '/Ajout',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp
+    iosIcon: addOutline,
+    mdIcon: addSharp
   },
   {
-    title: 'Liste annonce',
+    title: 'Liste des favories',
     url: '/liste',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp
+    iosIcon: listOutline,
+    mdIcon: listSharp
+  },
+  {
+    title: 'Log out',
+    url: '/logout',
+    iosIcon: listOutline,
+    mdIcon: listSharp
   }
   
 ];
@@ -66,13 +71,14 @@ const ajoute = [
     titre: 'Categorie',
     url: '/Ajouter/Categories'
   }
-  // {
-  //   titre: 'Models',
-  //   url: '/Ajouter/Models'
-  // }
 ];
 const Menu: React.FC = () => {
   const location = useLocation();
+  const history = useHistory();
+  const fucntionsimple = () => {
+    console.log("teste de rep");
+    
+  }
 
   return (
     <IonMenu contentId="main" type="overlay">
@@ -90,6 +96,7 @@ const Menu: React.FC = () => {
               </IonMenuToggle>
             );
           })}
+          
           <IonItem>
             <IonIcon aria-hidden="true" slot="start" icon="plus"  />
             <div className="content">
@@ -140,22 +147,6 @@ const Menu: React.FC = () => {
                     </div>
                 </div>
               </div>
-            {/* </div> */}
-            {/* <IonSelect
-                    interface="popover"
-                    toggleIcon={add}
-                    expandedIcon={remove}
-                    aria-label="Categorie" 
-                    placeholder="Choisir la Categorie" 
-                  >
-                  {ajoute.map((data) => (
-                    <IonSelectOption value={data.titre}>
-                      <IonItem className={location.pathname === "/Ajouter"+data.url ? 'selected' : ''} routerLink={data.url}>
-                        <IonLabel>{data.titre}</IonLabel>
-                      </IonItem>
-                    </IonSelectOption>
-                  ))}
-            </IonSelect> */}
           </IonItem>
         </IonList>
       </IonContent>

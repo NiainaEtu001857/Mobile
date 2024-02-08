@@ -14,14 +14,14 @@ const Liste_annonce: React.FC = () => {
     // const data1: AnnonceModel = { id_annonce: 1 , Nom: "Mercede 123" , Description: "Voiture de transport" , Prix_vente: 12000 , status: "nom vendu" , Models: "5210" , Marque: "Mercedes" };
     const [annonces, setAnnonces] = useState<AnnonceModel[]>();
     const history = useHistory();
-    const name = "Listes de tous les annonces";
+    const name = "Listes de tous les annonces favorites";
     useEffect(() => {
         const fetchAnnonces = async () => {
             const token = sessionStorage.getItem('token');
             console.log(token);
             try {
                 
-                const response = await fetch('http://localhost:8080/api/v1/annonces', {
+                const response = await fetch('http://localhost:8080/api/v1/annonces/utilisateurs/favoris', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,

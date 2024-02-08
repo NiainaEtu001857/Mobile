@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonList, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-// import { AnnonceModel } from '../data/AnnonceModel';
 import AnnonceC, { AnnonceCModel } from '../components/AnnonceComponent';
 import { useHistory } from 'react-router';
 import { AnnonceModel } from '../data/AnnonceModel';
@@ -16,7 +15,7 @@ const Annonces: React.FC = () => {
             const fetchModel = async () => {
                 try {
                     const token = sessionStorage.getItem('token');
-                    const response = await fetch('http://localhost:8080/api/v1/annonces', {
+                    const response = await fetch('http://localhost:8080/api/v1/annonces/utilisateur', {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -56,9 +55,18 @@ const Annonces: React.FC = () => {
     //     { id_annonce: 10 , Nom: "Audi kd" , Description: "Voiture de course" , Prix_vente: 140000 , status: "nom vendu" , Models: "plus prenium" , Marque: "Audi" },      
     // ];
     return(
+        <IonPage>
+            <IonHeader style={{backgroundColor: "red"}} >
+                <IonToolbar >
+                <IonButtons slot="start">
+                    <IonMenuButton />
+                </IonButtons>
+                <IonTitle>{name}</IonTitle>
+                </IonToolbar>
+            </IonHeader>
             <IonContent>
                 <IonCard>
-                    <div id="carouselExampleAutoplaying" className="carousel slide pointer-event" data-bs-ride="carousel">
+                    {/* <div id="carouselExampleAutoplaying" className="carousel slide pointer-event" data-bs-ride="carousel">
                         <div className="carousel-inner">
                             
                             <div className="carousel-item">
@@ -112,14 +120,16 @@ const Annonces: React.FC = () => {
                             <span className="carousel-control-next-icon" aria-hidden="true"></span>
                             <span className="visually-hidden">Next</span>
                         </button>
-                    </div>
+                    </div> */}
                 </IonCard>
                 
                 <AnnonceC data={annonces} />
-                <IonInfiniteScroll>
+                {/* <IonInfiniteScroll>
                     <IonInfiniteScrollContent loadingText="Please wait..." loadingSpinner="bubbles"></IonInfiniteScrollContent>
-            </IonInfiniteScroll>
+            </IonInfiniteScroll> */}
             </IonContent>
+        </IonPage>
+           
        
     );
 }
