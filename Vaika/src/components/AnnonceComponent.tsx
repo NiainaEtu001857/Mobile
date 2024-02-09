@@ -21,30 +21,34 @@ const AnnonceC: React.FC<AnnonceCModel> = ({data}) => {
 
       return (
         <IonContent>
+            <IonList>
                 {data?.map((annonce) => (
-                    <IonCard>
-                        <div className="image-container">
-                            <img height={'10%'} alt="Silhouette of mountains" src="/Akory.png" />
-                        </div>
-                        <IonCardHeader>
-                            <IonCardTitle> {annonce.acteur} </IonCardTitle>
-                            <IonCardSubtitle>Prix du produit : <strong>{annonce.prix_vente} $</strong></IonCardSubtitle>
-                        </IonCardHeader>
-                        <IonCardContent>
-                            <IonLabel>{annonce.description}</IonLabel>
-                        </IonCardContent>
-                        <IonRow>
-                            <IonCol size='3'>
-                                {/* <IonButton > <IonIcon icon={heart}></IonIcon> </IonButton> */}
+                    <IonItem>
+                        <IonCard>
+                            <div className="image-container">
+                                <img height={'10%'} alt="Silhouette of mountains" src="/Akory.png" />
+                            </div>
+                            <IonCardHeader>
+                                <IonCardTitle> {annonce.acteur} </IonCardTitle>
+                                <IonCardSubtitle>Prix du produit : <strong>{annonce.prix_vente} $</strong></IonCardSubtitle>
+                            </IonCardHeader>
+                            <IonCardContent>
+                                <IonLabel>{annonce.description}</IonLabel>
+                            </IonCardContent>
+                            <IonRow>
+                                <IonCol size='3'>
+                                    {/* <IonButton > <IonIcon icon={heart}></IonIcon> </IonButton> */}
+                                </IonCol>
+                            <IonCol>
+                                    <IonButton style={{marginLeft: '65%' }} key={annonce.annonce_id} routerLink={`/detail/${annonce.annonce_id}`} color="danger">Voir +</IonButton>
                             </IonCol>
-                           <IonCol>
-                                <IonButton style={{marginLeft: '65%' }} key={annonce.annonce_id} routerLink={`/detail/${annonce.annonce_id}`} color="danger">Voir +</IonButton>
-                           </IonCol>
-                        </IonRow>
-                        
-                    </IonCard>
+                            </IonRow>
+                            
+                        </IonCard>
+                    </IonItem>
                     
                 ))}
+            </IonList>
         </IonContent>
       );
 }

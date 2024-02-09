@@ -14,7 +14,7 @@ const AjoutCategorie: React.FC = () => {
             const fetchAnnonces = async () => {
                 try {
                     const token = sessionStorage.getItem('token');
-                    const response = await fetch('http://localhost:8080/api/v1/categories', {
+                    const response = await fetch('https://wscloudfinal-production.up.railway.app/api/v1/categories', {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`,

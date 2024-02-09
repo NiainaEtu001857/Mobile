@@ -24,7 +24,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import Register from './pages/Register';
+// import Register from './pages/Register';
 import React from 'react';
 import Annonce from './pages/Annonces';
 import Inscription from './pages/Inscription';

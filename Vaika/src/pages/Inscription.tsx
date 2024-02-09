@@ -38,7 +38,7 @@ const Inscription: React.FC = () => {
                 data.append('genre', String(genre));
             }
 
-            const response = await fetch('http://localhost:8080/api/auth/v1/inscription', {
+            const response = await fetch('https://wscloudfinal-production.up.railway.app/api/auth/v1/inscription', {
                 method: 'POST',
                 body: data,
             });

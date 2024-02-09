@@ -14,7 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import { useHistory, useLocation } from 'react-router-dom';
-import {  addOutline, addSharp, heartOutline, heartSharp, listOutline, listSharp, mailOutline, mailSharp, menuOutline, menuSharp, paperPlaneOutline, paperPlaneSharp, pulseOutline, pulseSharp, remove, searchCircleSharp, searchOutline } from 'ionicons/icons';
+import {  addOutline, addSharp, globeOutline, globeSharp, heartOutline, heartSharp, listOutline, listSharp, logOutOutline, logOutSharp, mailOutline, mailSharp, menuOutline, menuSharp, paperPlaneOutline, paperPlaneSharp, pulseOutline, pulseSharp, remove, searchCircleSharp, searchOutline } from 'ionicons/icons';
 import './Menu.css';
 import React from 'react';
 import { handlogout } from '../data/Function';
@@ -29,37 +29,20 @@ interface AppPage {
 const appPages: AppPage[] = [
 
   {
-    title: 'Menu',
+    title: 'Annonces',
     url: '/Menu',
-    iosIcon: menuOutline,
-    mdIcon: menuSharp
+    iosIcon: globeOutline,
+    mdIcon: globeSharp
   },
   {
-    title: 'Recherche',
-    url: '/Recherche',
-    iosIcon: searchOutline,
-    mdIcon: searchCircleSharp
-  },
-  {
-    title: 'Ajouter',
+    title: 'Ajouter annonce',
     url: '/Ajout',
     iosIcon: addOutline,
     mdIcon: addSharp
-  },
-  {
-    title: 'Liste des favories',
-    url: '/liste',
-    iosIcon: listOutline,
-    mdIcon: listSharp
-  },
-  {
-    title: 'Log out',
-    url: '/logout',
-    iosIcon: listOutline,
-    mdIcon: listSharp
   }
-  
 ];
+
+
 
 
 const ajoute = [
@@ -73,8 +56,31 @@ const ajoute = [
   }
 ];
 const Menu: React.FC = () => {
-  const location = useLocation();
   const history = useHistory();
+  const fetchLogout = async () => {
+    try {
+        const token = sessionStorage.getItem('token');
+        const response = await fetch('https://wscloudfinal-production.up.railway.app/api/auth/v1/logout', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+          console.log(responseData.data);
+          history.push("/");
+            window.location.reload();
+        } else {
+            console.error('Error fetching annonces:', response.status);
+        }
+    } catch (error) {
+        console.error('Error during fetch:', error);
+    }
+  };
+  const location = useLocation();
   const fucntionsimple = () => {
     console.log("teste de rep");
     
@@ -85,7 +91,6 @@ const Menu: React.FC = () => {
       <IonContent style={{backgroundColor: "red"}}>
         <IonList id="inbox-list"  >
           <IonListHeader>Menu</IonListHeader>
-          {/* <IonNote>hi@ionicframework.com</IonNote> */}
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
@@ -96,58 +101,11 @@ const Menu: React.FC = () => {
               </IonMenuToggle>
             );
           })}
-          
-          <IonItem>
-            <IonIcon aria-hidden="true" slot="start" icon="plus"  />
-            <div className="content">
-              <div className="accordion" id="accordionExample"></div>
-                <div className="accordion-item">
-                    <h2 className="accordion-header">
-                        <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapse3"
-                            aria-expanded="false"
-                            aria-controls="collapseTwo"
-                        >
-                            Voir la liste
-                        </button>
-                    </h2>
-                    <div
-                        id="collapse3"
-                        className="accordion-collapse collapse"
-                        data-bs-parent="#accordionExample"
-                    >
-                        <div className="accordion-body">
-                            <ul 
-                              className="list-group list-group-unbordered mb-3"
-                              style={{
-                               
-                                backgroundColor:'transparent',
-                                border: 'transparent',
-                              }}>
-                                {ajoute.map((data) => (
-                                  <IonButton routerLink={data.url}>
-                                    <li
-                                        className="list-group-item"
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            backgroundColor:'transparent',
-                                            border: 'transparent',
-                                        }}
-                                    >
-                                        <b>{data.titre}</b>
-                                    </li>
-                                  </IonButton>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-              </div>
+          <IonItem  onClick={fetchLogout} routerLink="/login">
+          <IonIcon aria-hidden="true" slot="start" ios={logOutOutline} md={logOutSharp} />
+            <IonLabel>Log out</IonLabel>
           </IonItem>
+          
         </IonList>
       </IonContent>
     </IonMenu>

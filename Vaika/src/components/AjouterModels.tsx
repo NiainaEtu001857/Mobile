@@ -49,7 +49,7 @@ const AjouterC: React.FC<{ data: Categorie[] }> = ({ data }) => {
 
   const AddMarque = async () => {
         
-    const url = 'http://localhost:8080/api/v1/categories'; // Replace with your actual API endpoint
+    const url = 'https://wscloudfinal-production.up.railway.app/api/v1/categories'; // Replace with your actual API endpoint
     const token = localStorage.getItem('token'); // Assuming you have a token stored in localStorage
 
     try {

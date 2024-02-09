@@ -47,7 +47,7 @@ const ModifierComp: React.FC<AnnonceDetail> = (data) => {
           try {
             const token = sessionStorage.getItem('token');
             console.log("io ehhh :" + model);
-            const url = 'http://localhost:8080/api/v1/models/v1/details/' + model;
+            const url = 'https://wscloudfinal-production.up.railway.app/api/v1/models/v1/details/' + model;
             console.log(url);
             
             const response = await fetch(url, {
@@ -78,7 +78,7 @@ const ModifierComp: React.FC<AnnonceDetail> = (data) => {
     const fetchLieu = async () => {
         try {
             const token = sessionStorage.getItem('token');
-            const response = await fetch('http://localhost:8080/api/lieux', {
+            const response = await fetch('https://wscloudfinal-production.up.railway.app/api/lieux', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -103,7 +103,7 @@ const ModifierComp: React.FC<AnnonceDetail> = (data) => {
   const fetchModel = async () => {
     try {
         const token = sessionStorage.getItem('token');
-        const response = await fetch('http://localhost:8080/api/v1/models', {
+        const response = await fetch('https://wscloudfinal-production.up.railway.app/api/v1/models', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -127,7 +127,7 @@ const ModifierComp: React.FC<AnnonceDetail> = (data) => {
   const fetchCarburant = async () => {
     try {
         const token = sessionStorage.getItem('token');
-        const response = await fetch('http://localhost:8080/api/v1/models/v1/carburants', {
+        const response = await fetch('https://wscloudfinal-production.up.railway.app/api/v1/models/v1/carburants', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -215,7 +215,7 @@ const valueModif = {
     const value = async () => {
         console.log(JSON.stringify(valueModif));
         try{
-            const response = await fetch('http://localhost:8080/api/auth/v1/inscription', {
+            const response = await fetch('https://wscloudfinal-production.up.railway.app/api/auth/v1/inscription', {
                     method: 'PUT',
                     body: JSON.stringify(valueModif),
                 });

@@ -15,7 +15,7 @@ const Annonces: React.FC = () => {
             const fetchModel = async () => {
                 try {
                     const token = sessionStorage.getItem('token');
-                    const response = await fetch('http://localhost:8080/api/v1/annonces/utilisateur', {
+                    const response = await fetch('https://wscloudfinal-production.up.railway.app/api/v1/annonces/utilisateur', {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`,

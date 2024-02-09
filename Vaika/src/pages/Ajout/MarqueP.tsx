@@ -13,7 +13,7 @@ const AjoutMarque: React.FC = () => {
             const fetchAnnonces = async () => {
                 try {
                     const token = sessionStorage.getItem('token');
-                    const response = await fetch('http://localhost:8080/api/v1/marques', {
+                    const response = await fetch('https://wscloudfinal-production.up.railway.app/api/v1/marques', {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`,

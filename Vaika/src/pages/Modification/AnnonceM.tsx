@@ -52,11 +52,11 @@ export interface DetailData {
 const Modifier: React.FC = () => {
     const [annonce, setAnnonce] = useState<AnnonceModel>();
     const name  = "Modification annonces";
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
         useEffect(() => {
             const fetchAnnonces = async () => {
                 try {
-                    const url = 'http://localhost:8080/api/v1/annonces/'+id;
+                    const url = 'https://wscloudfinal-production.up.railway.app/api/v1/annonces/'+id;
                     console.log(url);
                     
                     const token = sessionStorage.getItem('token');

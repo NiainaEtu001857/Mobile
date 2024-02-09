@@ -115,7 +115,7 @@ const Recherche: React.FC = () => {
         console.log(construireData());
         try {
             const token = sessionStorage.getItem('token');
-            const response = await fetch('http://localhost:8080/api/v1/annonces/filtre', {
+            const response = await fetch('https://wscloudfinal-production.up.railway.app/api/v1/annonces/filtre', {
                 method: 'GET',
                 headers: {
                   'Authorization': `Bearer ${token}`,
@@ -139,7 +139,7 @@ const Recherche: React.FC = () => {
         const fetchMarque = async () => {
             try {
                 const token = sessionStorage.getItem('token');
-                const response = await fetch('http://localhost:8080/api/v1/marques', {
+                const response = await fetch('https://wscloudfinal-production.up.railway.app/api/v1/marques', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -163,7 +163,7 @@ const Recherche: React.FC = () => {
         const fetchCategorie = async () => {
           try {
               const token = sessionStorage.getItem('token');
-              const response = await fetch('http://localhost:8080/api/v1/categories', {
+              const response = await fetch('https://wscloudfinal-production.up.railway.app/api/v1/categories', {
                   method: 'GET',
                   headers: {
                       'Authorization': `Bearer ${token}`,
@@ -188,7 +188,7 @@ const Recherche: React.FC = () => {
       const fetchCarburant = async () => {
         try {
             const token = sessionStorage.getItem('token');
-            const response = await fetch('http://localhost:8080/api/v1/models/v1/carburants', {
+            const response = await fetch('https://wscloudfinal-production.up.railway.app/api/v1/models/v1/carburants', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -212,7 +212,7 @@ const Recherche: React.FC = () => {
       const fetchLieu = async () => {
         try {
             const token = sessionStorage.getItem('token');
-            const response = await fetch('http://localhost:8080/api/lieux', {
+            const response = await fetch('https://wscloudfinal-production.up.railway.app/api/lieux', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,

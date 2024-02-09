@@ -41,7 +41,7 @@ const DetailAnnonceComponent: React.FC<AnnonceDetail> = (data) => {
         const fetchUtilisateur = async () => {
             try {
                 const token = sessionStorage.getItem('token');
-                const response = await fetch('http://localhost:8080/api/auth', {
+                const response = await fetch('https://wscloudfinal-production.up.railway.app/api/auth', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -79,7 +79,7 @@ const DetailAnnonceComponent: React.FC<AnnonceDetail> = (data) => {
         
         try {
             const token = sessionStorage.getItem('token');
-            const response = await fetch('http://localhost:8080/api/v1/annonces/vendu', {
+            const response = await fetch('https://wscloudfinal-production.up.railway.app/api/v1/annonces/vendu', {
                 method: 'POST',
                 body:JSON.stringify(getdata),
                 headers: {
@@ -107,7 +107,7 @@ const DetailAnnonceComponent: React.FC<AnnonceDetail> = (data) => {
     const getSuprimer = async () => {
         try {
             const token = sessionStorage.getItem('token');
-            const response = await fetch('http://localhost:8080/api/v1/annonces/'+ data.data?.annonce_id, {
+            const response = await fetch('https://wscloudfinal-production.up.railway.app/api/v1/annonces/'+ data.data?.annonce_id, {
                 method: 'DELETE',
                 body:JSON.stringify(getdata),
                 headers: {
@@ -131,7 +131,7 @@ const DetailAnnonceComponent: React.FC<AnnonceDetail> = (data) => {
     return (
         <IonContent>
              <IonCard>
-                <div id="carouselExampleAutoplaying" className="carousel slide pointer-event" data-bs-ride="carousel">
+                {/* <div id="carouselExampleAutoplaying" className="carousel slide pointer-event" data-bs-ride="carousel">
                     <div className="carousel-inner">
                         <div className="carousel-item">
                             <svg className="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: First slide" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"></rect><text x="40%" y="25%" fill="#555" dy=".3em">First slide</text></svg>
@@ -151,7 +151,7 @@ const DetailAnnonceComponent: React.FC<AnnonceDetail> = (data) => {
                         <span className="carousel-control-next-icon" aria-hidden="true"></span>
                         <span className="visually-hidden">Next</span>
                     </button>
-                </div>
+                </div> */}
                 <IonCardHeader>
                     <IonCardTitle>{data.data?.acteur} <strong style={{ textAlign: 'right' }}> Lieu : {data.data?.lieu }</strong></IonCardTitle>
                     <IonCardSubtitle>Prix du produit : {data.data?.prix_vente} Ar</IonCardSubtitle>

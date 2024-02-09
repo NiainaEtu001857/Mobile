@@ -20,7 +20,7 @@ const Login: React.FC = () => {
             data.append('email',email);
             data.append('mdp' , password);
 
-            const response = await fetch('http://localhost:8080/api/auth/v1/login', {
+            const response = await fetch('https://wscloudfinal-production.up.railway.app/api/auth/v1/login', {
                 method: 'POST',
                 body: data,
             });

@@ -21,7 +21,7 @@ const Liste_annonce: React.FC = () => {
             console.log(token);
             try {
                 
-                const response = await fetch('http://localhost:8080/api/v1/annonces/utilisateurs/favoris', {
+                const response = await fetch('https://wscloudfinal-production.up.railway.app/v1/annonces/utilisateurs/favoris', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
